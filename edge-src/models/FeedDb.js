@@ -113,6 +113,27 @@ export default class FeedDb {
     return this.FEED_DB.prepare(sql).bind(...bindList)
   }
 
+  getUpsertSql(table, primaryKey, queryKwargs, keyValuePairs) {
+    let updateSql = 'UPDATE SET';
+    const setList = ['updated_at = ?'];
+    const updateBindList = [(new Date()).toISOString()];
+    Object.keys(keyValuePairs).forEach((key) => {
+      setList.push(`${key} = ?`);
+      updateBindList.push(keyValuePairs[key]);
+    });
+    updateSql = `${updateSql} ${setList.join(', ')}`;
+
+    let insertSql = `INSERT INTO ${table}`;
+    const insertKeyValuePairs = {...queryKwargs, ...keyValuePairs};
+    const colList = Object.keys(insertKeyValuePairs)
+    const insertBindList = Object.values(insertKeyValuePairs);
+    const placeholderList = insertBindList.map(() => '?');
+    insertSql = `${insertSql} (${colList.join(', ')}) VALUES (${placeholderList.join(', ')})`;
+
+    const sql = `${insertSql} ON CONFLICT(${primaryKey}) DO ${updateSql}`;
+    return this.FEED_DB.prepare(sql).bind(...insertBindList, ...updateBindList);
+  }
+
   async initDb() {
     const settings = {
       [SETTINGS_CATEGORIES.SUBSCRIBE_METHODS]: {
@@ -144,6 +165,7 @@ export default class FeedDb {
       'itunes:type': 'episodic',
       'itunes:complete': false,
       'itunes:block': false,
+      'copyright': `©${(new Date()).getFullYear()}`,
     };
 
     const batchStatements = [
@@ -323,7 +345,10 @@ export default class FeedDb {
         orderBy,
         queryKwargs,
       };
-      if (fetchItemsParams.limit > MAX_ITEMS_PER_PAGE) {
+
+      if (fetchItemsParams.limit < 0) {
+        fetchItemsParams.limit = undefined;
+      } else if (fetchItemsParams.limit > MAX_ITEMS_PER_PAGE) {
         fetchItemsParams.limit = MAX_ITEMS_PER_PAGE;
       }
       things = [{
@@ -355,43 +380,25 @@ export default class FeedDb {
   }
 
   async _updateOrAddSetting(settings, category) {
-    // XXX: d1 is obviously not for prime time :(
-    // This ugly "insert" then "update" pattern is for d1 alpha. And it might not work on production...
     let res;
     try {
-      console.log('Trying to update...');
-      res = await this.getUpdateSql(
+      res = await this.getUpsertSql(
         'settings',
-        {
-          category,
-        },
+        'category',
+        {category},
         {
           data: JSON.stringify(settings[category]),
-        },
-      ).run();
+        }).run();
     } catch (error) {
-      console.log('Failed to update for ', category, error);
-    }
-    try {
-      console.log('Trying to insert...', category);
-      console.log(settings);
-      res = await this.getInsertSql(
-        'settings',
-        {
-          category,
-          data: JSON.stringify(settings[category]),
-        },
-      ).run();
-    } catch (error) {
-      console.log('Failed to insert for ', category, error);
+      console.log('Failed to upsert', error);
     }
     console.log('Done', res);
   }
 
   async _putSettingsToContent(settings) {
-    Object.keys(settings).forEach((category) => {
-      this._updateOrAddSetting(settings, category);
-    });
+    for (const category of Object.keys(settings)) {
+      await this._updateOrAddSetting(settings, category);
+    }
   }
 
   async _putItemToContent(item) {
@@ -403,27 +410,10 @@ export default class FeedDb {
     };
     let res;
     try {
-      console.log('Inserting...')
-      res = await this.getInsertSql('items', {
-        id,
-        ...keyValuePairs,
-      }).run();
+      res = await this.getUpsertSql(
+        'items', 'id', {id}, {...keyValuePairs}).run();
     } catch (error) {
-      console.log('Failed to insert.', error);
-    }
-    try {
-      console.log('Trying to update...', id);
-      res = await this.getUpdateSql(
-        'items',
-        {
-          id,
-        },
-        {
-          ...keyValuePairs,
-        },
-      ).run();
-    } catch (error) {
-      console.log('Failed to update.', error);
+      console.log('Failed to upsert', error);
     }
     console.log('Done!', res);
   }
@@ -447,7 +437,7 @@ export default class FeedDb {
     if (!content) {
       content = await this.getContent();
     }
-    const builder = new FeedPublicJsonBuilder(content, this.baseUrl, forOneItem);
+    const builder = new FeedPublicJsonBuilder(content, this.baseUrl, this.request, forOneItem);
     return builder.getJsonData();
   }
 }

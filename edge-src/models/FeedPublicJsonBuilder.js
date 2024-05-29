@@ -6,18 +6,20 @@ import {
   htmlToPlainText
 } from "../../common-src/StringUtils";
 import {humanizeMs, msToRFC3339} from "../../common-src/TimeUtils";
-import {ENCLOSURE_CATEGORIES, STATUSES} from "../../common-src/Constants";
+import {ENCLOSURE_CATEGORIES, ITEM_STATUSES_DICT, STATUSES} from "../../common-src/Constants";
+import {isValidMediaFile} from "../../common-src/MediaFileUtils";
 
-const DEFAULT_MICROFEED_VERSION = 'v1';
+const {MICROFEED_VERSION} = require('../../common-src/Version');
 
 export default class FeedPublicJsonBuilder {
-  constructor(content, baseUrl, forOneItem = false) {
+  constructor(content, baseUrl, request, forOneItem = false) {
     this.content = content;
     this.settings = content.settings || {};
     this.webGlobalSettings = this.settings.webGlobalSettings || {};
     this.publicBucketUrl = this.webGlobalSettings.publicBucketUrl || '';
     this.baseUrl = baseUrl;
     this.forOneItem = forOneItem;
+    this.request = request;
   }
 
   _decorateForItem(item, baseUrl) {
@@ -25,14 +27,16 @@ export default class FeedPublicJsonBuilder {
     item.jsonUrl = PUBLIC_URLS.jsonItem(item.id, null, baseUrl);
     item.rssUrl = PUBLIC_URLS.rssItem(item.id, null, baseUrl);
 
-    item.pubDate = humanizeMs(item.pubDateMs);
+    // Try our best to use local time of a website visitor
+    const timezone = this.request.cf ? this.request.cf.timezone : null;
+    item.pubDate = humanizeMs(item.pubDateMs, timezone);
     item.pubDateRfc3339 = msToRFC3339(item.pubDateMs);
     item.descriptionText = htmlToPlainText(item.description);
 
     if (item.image) {
       item.image = urlJoinWithRelative(this.publicBucketUrl, item.image);
     }
-    if (item.mediaFile && item.mediaFile.category) {
+    if (isValidMediaFile(item.mediaFile)) {
       item.mediaFile.isAudio = item.mediaFile.category === ENCLOSURE_CATEGORIES.AUDIO;
       item.mediaFile.isDocument = item.mediaFile.category === ENCLOSURE_CATEGORIES.DOCUMENT;
       item.mediaFile.isExternalUrl = item.mediaFile.category === ENCLOSURE_CATEGORIES.EXTERNAL_URL;
@@ -64,11 +68,12 @@ export default class FeedPublicJsonBuilder {
     publicContent['description'] = channel.description || '';
 
     if (channel.image) {
-      publicContent['icon'] = urlJoinWithRelative(this.publicBucketUrl, channel.image);
+      publicContent['icon'] = urlJoinWithRelative(this.publicBucketUrl, channel.image, this.baseUrl);
     }
 
     if (this.webGlobalSettings.favicon && this.webGlobalSettings.favicon.url) {
-        publicContent['favicon'] = urlJoinWithRelative(this.publicBucketUrl, this.webGlobalSettings.favicon.url);
+        publicContent['favicon'] = urlJoinWithRelative(
+          this.publicBucketUrl, this.webGlobalSettings.favicon.url, this.baseUrl);
     }
 
     if (channel.publisher) {
@@ -91,7 +96,8 @@ export default class FeedPublicJsonBuilder {
     const channel = this.content.channel || {};
     const subscribeMethods = this.settings.subscribeMethods || {'methods': []};
     const microfeedExtra = {
-      microfeed_version: this.content.microfeed_version || DEFAULT_MICROFEED_VERSION,
+      microfeed_version: MICROFEED_VERSION,
+      base_url: this.baseUrl,
       categories: [],
     };
     const channelCategories = channel.categories || [];
@@ -118,7 +124,8 @@ export default class FeedPublicJsonBuilder {
       microfeedExtra['subscribe_methods'] = '';
     } else {
       microfeedExtra['subscribe_methods'] = subscribeMethods.methods.filter((m) => m.enabled).map((m) => {
-        m.image = urlJoinWithRelative(this.baseUrl, m.image);
+        // TODO: supports custom icons that are hosted on R2
+        m.image = urlJoinWithRelative(this.publicBucketUrl, m.image, this.baseUrl);
         if (!m.editable) {
           switch (m.type) {
             case 'rss':
@@ -197,23 +204,26 @@ export default class FeedPublicJsonBuilder {
       json_url: item.jsonUrl,
       rss_url: item.rssUrl,
       guid: item.guid,
+      status: ITEM_STATUSES_DICT[item.status] ? ITEM_STATUSES_DICT[item.status].name : 'published',
     };
 
-    if (mediaFile.url) {
-      attachment['url'] = buildAudioUrlWithTracking(mediaFile.url, trackingUrls);
-    }
-    if (mediaFile.contentType) {
-      attachment['mime_type'] = mediaFile.contentType;
-    }
-    if (mediaFile.sizeByte) {
-      attachment['size_in_byte'] = mediaFile.sizeByte;
-    }
-    if (mediaFile.durationSecond) {
-      attachment['duration_in_seconds'] = mediaFile.durationSecond;
-      _microfeed['duration_hhmmss'] = secondsToHHMMSS(mediaFile.durationSecond);
-    }
-    if (Object.keys(attachment).length > 0) {
-      newItem['attachments'] = [attachment];
+    if (isValidMediaFile(mediaFile)) {
+      if (mediaFile.url) {
+        attachment['url'] = buildAudioUrlWithTracking(mediaFile.url, trackingUrls);
+      }
+      if (mediaFile.contentType) {
+        attachment['mime_type'] = mediaFile.contentType;
+      }
+      if (mediaFile.sizeByte) {
+        attachment['size_in_byte'] = mediaFile.sizeByte;
+      }
+      if (mediaFile.durationSecond) {
+        attachment['duration_in_seconds'] = mediaFile.durationSecond;
+        _microfeed['duration_hhmmss'] = secondsToHHMMSS(mediaFile.durationSecond);
+      }
+      if (Object.keys(attachment).length > 0) {
+        newItem['attachments'] = [attachment];
+      }
     }
     if (item.link) {
       newItem['url'] = item.link;
@@ -251,10 +261,10 @@ export default class FeedPublicJsonBuilder {
       _microfeed['itunes:episodeType'] = item['itunes:episodeType'];
     }
     if (item['itunes:season']) {
-      _microfeed['itunes:season'] = item['itunes:season'];
+      _microfeed['itunes:season'] = parseInt(item['itunes:season'], 10);
     }
     if (item['itunes:episode']) {
-      _microfeed['itunes:episode'] = item['itunes:episode'];
+      _microfeed['itunes:episode'] = parseInt(item['itunes:episode'], 10);
     }
     if (item['itunes:explicit']) {
       _microfeed['itunes:explicit'] = item['itunes:explicit'];

@@ -11,6 +11,7 @@ export const SETTINGS_CATEGORIES = {
   CUSTOM_CODE: 'customCode',
   ANALYTICS: 'analytics',
   ACCESS: 'access',
+  API_SETTINGS: 'apiSettings',
 };
 
 export const DEFAULT_ITEMS_PER_PAGE = 20;
@@ -143,7 +144,7 @@ export const ENCLOSURE_CATEGORIES = {
 export const ENCLOSURE_CATEGORIES_DICT = {
   [ENCLOSURE_CATEGORIES.AUDIO]: {
     name: 'audio',
-    fileTypes: ['mp3'],
+    fileTypes: ['mp3', 'm4b', 'flac'],
   },
   [ENCLOSURE_CATEGORIES.VIDEO]: {
     name: 'video',
@@ -162,6 +163,14 @@ export const ENCLOSURE_CATEGORIES_DICT = {
     fileTypes: [],
   },
 };
+
+export const SUPPORTED_ENCLOSURE_CATEGORIES = [
+  ENCLOSURE_CATEGORIES.AUDIO,
+  ENCLOSURE_CATEGORIES.VIDEO,
+  ENCLOSURE_CATEGORIES.DOCUMENT,
+  ENCLOSURE_CATEGORIES.IMAGE,
+  ENCLOSURE_CATEGORIES.EXTERNAL_URL,
+];
 
 export const NAV_ITEMS = {
   ADMIN_HOME: 'admin_home',
@@ -214,6 +223,12 @@ export const ONBOARDING_TYPES = {
   VALID_PUBLIC_BUCKET_URL: 1,
   PROTECTED_ADMIN_DASHBOARD: 2,
   CUSTOM_DOMAIN: 3,
+};
+
+export const ITEM_STATUSES_STRINGS_DICT = {
+  'published': STATUSES.PUBLISHED,
+  'unpublished': STATUSES.UNPUBLISHED,
+  'unlisted': STATUSES.UNLISTED,
 };
 
 export const ITEM_STATUSES_DICT = {

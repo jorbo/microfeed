@@ -1,6 +1,6 @@
 {
   "name": "microfeed",
-  "version": "1.0.0",
+  "version": "0.1.2",
   "license": "MIT",
   "scripts": {
     "build:production": "NODE_ENV=production webpack --config ./webpack.config.js",
@@ -9,7 +9,8 @@
     "setup:production": "sh ops/generate_vars_toml.sh && yarn install && node ops/init_r2.js && node ops/init_feed_db.js && node ops/init_project.js",
     "deploy:cloudflare": "node ops/sync_project_config.js && yarn build:production",
     "deploy:github": "node ops/sync_project_config.js && node ops/direct_upload.js",
-    "test": "jest"
+    "test": "TZ=UTC jest",
+    "sync-version": "node ops/sync_microfeed_version.js"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.4",
@@ -43,7 +44,7 @@
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.2",
     "autoprefixer": "^10.4.12",
-    "aws-sdk": "^2.1238.0",
+    "aws-sdk": "^2.1539.0",
     "better-sqlite3": "7.6.2",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.1",
@@ -65,6 +66,6 @@
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.1",
     "webpack-shell-plugin-next": "^2.2.2",
-    "wrangler": "^2.3.2"
+    "wrangler": "^2.9.1"
   }
 }

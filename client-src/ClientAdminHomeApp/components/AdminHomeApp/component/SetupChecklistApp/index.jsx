@@ -3,7 +3,7 @@ import {ONBOARDING_TYPES, OUR_BRAND, SETTINGS_CATEGORIES} from "../../../../../.
 import {CheckCircleIcon, ArrowRightCircleIcon} from "@heroicons/react/20/solid";
 import AdminInput from "../../../../../components/AdminInput";
 import Requests from "../../../../../common/requests";
-import {ADMIN_URLS} from "../../../../../../common-src/StringUtils";
+import {ADMIN_URLS, isValidUrl} from "../../../../../../common-src/StringUtils";
 import {showToast} from "../../../../../common/ToastUtils";
 
 const SUBMIT_STATUS__START = 1;
@@ -34,6 +34,7 @@ function SetupPublicBucketUrl({onboardState, webGlobalSettings, cloudflareUrls})
     <div className="flex">
       <div className="mr-4 flex-1">
         <AdminInput
+          type="url"
           placeholder="e.g., https://cdn.example.com"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
@@ -46,6 +47,12 @@ function SetupPublicBucketUrl({onboardState, webGlobalSettings, cloudflareUrls})
           className="lh-btn lh-btn-brand-dark"
           onClick={(e) => {
             e.preventDefault();
+            if (!isValidUrl(url)) {
+              showToast('Invalid url. A valid url should start with http:// or https://, ' +
+                'for example, https://media-cdn.microfeed.org',
+                'error', 5000);
+              return;
+            }
             setSubmitStatus(SUBMIT_STATUS__START);
             Requests.axiosPost(ADMIN_URLS.ajaxFeed(), {
               settings: {
@@ -172,6 +179,11 @@ function ProtectedAdminDashboard({onboardState, cloudflareUrls}) {
         </div>
         <div className="mt-4">
           Fill in info for <b>{cloudflareUrls.pagesDevUrl}/admin</b>:
+        </div>
+        <div className="mt-2 text-red-500">
+          {'Note: Please follow numbered arrows in order. Otherwise, "Path" may not be edited. ' +
+           'If you see "the zone does not exist" message, please ignore it and go ahead to Next. ' +
+           'We hope Cloudflare can improve their UI to make things less confusing :)'}
         </div>
         <div className="mt-2">
           <img src="/assets/howto/add-app1.png" className="w-full border"/>

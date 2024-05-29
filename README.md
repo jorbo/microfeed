@@ -1,10 +1,23 @@
-# microfeed: a lightweight cms self-hosted on cloudflare
+</br>
+</br>
+<div align="center">
+  <a href="https://www.microfeed.org/" target="_blank">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/1719237/210119945-50e1d444-2d12-43d2-a96d-65bdbccecb70.png">
+    <img src="https://user-images.githubusercontent.com/1719237/207514210-99ddbd03-f8f0-410a-96c8-80da1afb804d.png" width="280" alt="Logo"/>
+  </picture>
+  </a>
+</div>
 
-[<img src="https://user-images.githubusercontent.com/1719237/207514210-99ddbd03-f8f0-410a-96c8-80da1afb804d.png" width=400 alt="microfeed: a lightweight self-hosted CMS on Cloudflare" />](https://www.microfeed.org/)
+<h1 align="center">microfeed: a lightweight cms self-hosted on cloudflare</h1>
 
-[![Deploy to Cloudflare Pages](https://github.com/microfeed/microfeed/actions/workflows/deploy.yml/badge.svg?event=workflow_dispatch)](https://github.com/microfeed/microfeed/actions/workflows/deploy.yml)
-[![Email us](https://img.shields.io/badge/Email-support%40microfeed.org-blue)](mailto:support@microfeed.org)
-[![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://www.microfeed.org/i/introducing-microfeed-self-hosted-cms-on-cloudflare-opensource-serverless-free-uhbQEmArlC2/)
+  <p align="center">
+    <a href="https://github.com/microfeed/microfeed/issues/new?assignees=&labels=bug"><b>Report Bug</b></a>
+    ·
+    <a href="https://github.com/microfeed/microfeed/discussions/new?category=ideas"><b>Request Feature</b></a>
+    ·
+    <a href="mailto:support@microfeed.org"><b>Email Us Privately</b></a>
+  </p>
 
 Welcome to microfeed, a lightweight content management system (CMS) self-hosted on Cloudflare.
 With microfeed, you can easily publish a variety of content such as audios, videos, photos, documents, blog posts,
@@ -16,25 +29,27 @@ microfeed is built by [Listen Notes](https://www.listennotes.com/) and is hosted
 
 If you have any questions or feedback, please don't hesitate to reach out to us at support@microfeed.org. We'd love to hear from you!
 
-**Table of contents**
-<!-- TOC -->
-* [microfeed: a lightweight cms self-hosted on cloudflare](#microfeed--a-lightweight-cms-self-hosted-on-cloudflare)
-  * [How it works](#how-it-works)
-  * [Installation](#installation)
-    * [Prerequisites](#prerequisites)
-    * [Step 1. Fork the microfeed repo to your GitHub](#step-1-fork-the-microfeed-repo-to-your-github)
-    * [Step 2. Put some secrets on your forked repo](#step-2-put-some-secrets-on-your-forked-repo)
-    * [Step 3. Run GitHub Action to deploy code](#step-3-run-github-action-to-deploy-code)
-    * [Step 4. Make a few clicks on Cloudflare dashboard](#step-4-make-a-few-clicks-on-cloudflare-dashboard)
-    * [Step 5. Done. Start publishing!](#step-5-done-start-publishing-)
-    * [Bonus. Update to the latest version of microfeed](#bonus-update-to-the-latest-version-of-microfeed)
-  * [FAQs](#faqs)
-  * [Contributions](#contributions)
-    * [Run microfeed on local](#run-microfeed-on-local)
-  * [License](#license)
-<!-- TOC -->
+## 📚 Table of contents
+[![Deploy to Cloudflare Pages](https://github.com/microfeed/microfeed/actions/workflows/deploy.yml/badge.svg?event=workflow_dispatch)](https://github.com/microfeed/microfeed/actions/workflows/deploy.yml)
+[![CI](https://github.com/microfeed/microfeed/actions/workflows/ci.yml/badge.svg)](https://github.com/microfeed/microfeed/actions/workflows/ci.yml)
+[![Email us](https://img.shields.io/badge/Email-support%40microfeed.org-blue)](mailto:support@microfeed.org)
+[![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://www.microfeed.org/i/introducing-microfeed-self-hosted-cms-on-cloudflare-opensource-serverless-free-uhbQEmArlC2/)
 
-## How it works
+* [⭐️ How it works](#%EF%B8%8F-how-it-works)
+* [🚀 Installation](#-installation)
+  * [Prerequisites](#prerequisites)
+  * [Step 1. Fork the microfeed repo to your GitHub](#step-1-fork-the-microfeed-repo-to-your-github)
+  * [Step 2. Put some secrets on your forked repo](#step-2-put-some-secrets-on-your-forked-repo)
+  * [Step 3. Run GitHub Action to deploy code](#step-3-run-github-action-to-deploy-code)
+  * [Step 4. Make a few clicks on Cloudflare dashboard](#step-4-make-a-few-clicks-on-cloudflare-dashboard)
+  * [Step 5. Done. Start publishing](#step-5-done-start-publishing)
+  * [Bonus. Update to the latest version of microfeed](#bonus-update-to-the-latest-version-of-microfeed)
+* [💻 FAQs](#-faqs)
+* [💪 Contributions](#-contributions)
+  * [Run microfeed on local](#run-microfeed-on-local)
+* [🛡️ License](#%EF%B8%8F-license)
+
+## ⭐️ How it works
 
 Since the 1990s, a significant portion of the web has been powered by feeds.
 People (and bots) publish items to a feed, and others can subscribe to that feed to receive new content.
@@ -42,11 +57,15 @@ People (and bots) publish items to a feed, and others can subscribe to that feed
 microfeed makes it easy for individuals to self-host their own feed on Cloudflare, including but not limited to
 * a podcast feed of audios
 * a blog feed of posts
-* an Instagram-like feed of images (e.g., [llamacorn.listennotes.com](https://llamacorn.listennotes.com/))
+* an Instagram-like feed of images (e.g., [llamacorn.listennotes.com](https://llamacorn.listennotes.com/), [brand-assets.listennotes.com](https://brand-assets.listennotes.com/))
 * a YouTube-like feed of videos
 * a personal website with custom links (e.g., [wenbin.org](https://www.wenbin.org/))
-* a content curation feed of external urls
+* a content curation feed of external news article urls
 * a marketing site with updates and press coverage (e.g., [microfeed.org](https://www.microfeed.org/))
+* a headless cms with a GUI dashboard and a public json feed (e.g., [microfeed.org/json](https://www.microfeed.org/json/) with OpenAPI spec in [YAML](https://www.microfeed.org/json/openapi.yaml) and [HTML](https://www.microfeed.org/json/openapi.html))
+* a list of domain names for sale (e.g., [ListenHost.com](https://www.listenhost.com/)...)
+* a website for an entire book (e.g., [The Art of War](https://the-art-of-war.microfeed.org/))
+* a changelog website (e.g., [changelog.listennotes.com](https://changelog.listennotes.com/))
 * ...
 
 microfeed uses Cloudflare [Pages](https://pages.cloudflare.com/) to host and run the code,
@@ -68,8 +87,9 @@ upload media files, and customize web page styles. If you've used WordPress befo
 
 ![image-6d056193c81c0b8f5de0503f5af18116](https://user-images.githubusercontent.com/1719237/209486588-00acefe0-dd51-4bfc-aed7-1f63850aa720.png)
 
+[Back to 📚TOC](#-table-of-contents)
 
-## Installation
+## 🚀 Installation
 
 Roughly you'll follow these steps to install a microfeed instance to Cloudflare:
 
@@ -84,11 +104,12 @@ Roughly you'll follow these steps to install a microfeed instance to Cloudflare:
 > which would allow for almost one-click deployment of microfeed. In the meantime, we've tried to make the setup process
 > as straightforward as possible for tech-savvy users.
 
-
 ### Prerequisites
 
 * Have a Cloudflare account. If you don't have one already, you can [sign up for free at Cloudflare.com](https://dash.cloudflare.com/sign-up).
 * Have a GitHub account. If you don't have one, you can [sign up for free at GitHub.com](https://github.com/signup).
+
+[Back to TOC](#-table-of-contents)
 
 ### Step 1. Fork the microfeed repo to your GitHub
 
@@ -96,6 +117,8 @@ Simply click on [https://github.com/microfeed/microfeed/fork](https://github.com
 
 You may choose to modify the code in your forked repository in the future, but it's likely that you won't need to
 touch the code at all. Simply fork the repository and keep it synced for future use.
+
+[Back to 📚TOC](#-table-of-contents)
 
 ### Step 2. Put some secrets on your forked repo
 
@@ -152,9 +175,10 @@ Create an R2 API token here:
 
   <img width="1328" alt="Screenshot 2022-12-04 at 4 43 58 PM" src="https://user-images.githubusercontent.com/1719237/205526381-cc11d4fe-b053-49d0-9072-de54db31b3b7.png">
 
-Select "Edit" permission and create an API token:
+Select "Admin Read & Write" permission and create an API token:
 
-  <img width="849" alt="Screenshot 2022-12-04 at 4 45 18 PM" src="https://user-images.githubusercontent.com/1719237/205526491-79a87e1e-02e0-4268-9f88-7d9cdc6b3b68.png">
+  <img width="858" alt="Screenshot 2023-08-08 at 4 33 55 PM" src="https://github.com/microfeed/microfeed/assets/1719237/1a90df29-5660-49d4-b66a-24873812492d">
+
 
 Copy Access Key ID for R2_ACCESS_KEY_ID, and Secret Access Key for R2_SECRET_ACCESS_KEY
   <img width="728" alt="Screenshot 2022-12-04 at 4 45 35 PM" src="https://user-images.githubusercontent.com/1719237/205526582-92f440ac-21c4-46d9-a065-cfc1937391c8.png">
@@ -179,6 +203,7 @@ In total, you'll add 5 secrets for GitHub Actions:
 
 <img width="826" alt="Screenshot 2022-12-04 at 4 10 46 PM" src="https://user-images.githubusercontent.com/1719237/205524410-268abf92-af61-467a-8883-78b8d4de3c56.png">
 
+[Back to 📚TOC](#-table-of-contents)
 
 ### Step 3. Run GitHub Action to deploy code
 
@@ -193,6 +218,8 @@ If you see the green checkmark, then the deployment is successful. And you can s
 
 You can access the site via ${CLOUDFLARE_PROJECT_NAME}.pages.dev, for example, [https://microfeed-org.pages.dev/](https://microfeed-org.pages.dev/)
 
+[Back to 📚TOC](#-table-of-contents)
+
 ### Step 4. Make a few clicks on Cloudflare dashboard
 
 To manage your microfeed instance, you'll use the admin dashboard at ${CLOUDFLARE_PROJECT_NAME}.pages.dev/admin, for example, [https://microfeed-org.pages.dev/admin/](https://microfeed-org.pages.dev/admin/) (the admin dashboard needs to be protected by Cloudflare Zero Trust).
@@ -201,15 +228,22 @@ Upon accessing the admin dashboard for the first time, you'll complete the setup
 
 <img width="1182" alt="Screenshot 2022-12-17 at 10 34 05 AM" src="https://user-images.githubusercontent.com/1719237/208216864-38a65086-77ef-4595-bc05-c87be2676e6d.png">
 
-### Step 5. Done. Start publishing!
+[Back to 📚TOC](#-table-of-contents)
+
+### Step 5. Done. Start publishing
 
 Once you've completed the setup process, your microfeed instance will be ready to use.
 You can add, update, or delete items from the admin dashboard.
 
 You can also customize the appearance of the website at Settings / Custom code by editing the raw HTML and CSS:
 
-<img width="1094" alt="Screenshot 2022-12-26 at 1 15 57 PM" src="https://user-images.githubusercontent.com/1719237/209499220-a2f7b7e4-f0b0-422a-bdf2-2ffed4b37aff.png">
+<img width="1098" alt="Screenshot 2022-12-30 at 7 57 45 PM" src="https://user-images.githubusercontent.com/1719237/210062910-e56135f6-557e-419e-a00d-b25dd391c93d.png">
 
+The HTML code is using [mustache.js](https://github.com/janl/mustache.js) as a templating language, where you can access to variables from Feed Json or Item Json. For example, on our marketing website [microfeed.org](https://www.microfeed.org/)'s home page (Feed Web), we use variables in the html code from [microfeed.org/json/](https://www.microfeed.org/json/), and on [an item's page](https://www.microfeed.org/i/introducing-microfeed-a-self-hosted-open-source-cms-on-cloudflare-open-alpha-uhbQEmArlC2/) (Item Web), we use variables from [${item_url}/json](https://www.microfeed.org/i/introducing-microfeed-a-self-hosted-open-source-cms-on-cloudflare-open-alpha-uhbQEmArlC2/json).
+
+With the easy access to the json data of a microfeed instance (i.e., [Feed Json](https://www.microfeed.org/json/) and [Item Json](https://www.microfeed.org/i/introducing-microfeed-a-self-hosted-open-source-cms-on-cloudflare-open-alpha-uhbQEmArlC2/json), you can use it as a headless CMS and build your own client apps to display the content.
+
+[Back to 📚TOC](#-table-of-contents)
 
 ### Bonus. Update to the latest version of microfeed
 
@@ -222,18 +256,19 @@ You'll first sync up the code in your forked repo:
 
 Then go to [Actions -> Deploy to Cloudflare Pages](../../actions/workflows/deploy.yml) and run Workflow to deploy the new code.
 
+[Back to 📚TOC](#-table-of-contents)
 
-
-## FAQs
+## 💻 FAQs
 
 <details>
 <summary><b>How can I track podcast / video / image downloads?</b></summary>
 
 To track podcast, video, or image downloads with microfeed, you can use the tracking URLs feature.
-This allows you to set up third-party tracking URLs for your media files, such as those provided by Podtrac or Chartable.
+This allows you to set up third-party tracking URLs for your media files, such as those provided by [OP3](https://op3.dev/), [Podtrac](http://analytics.podtrac.com/), [Chartable](https://chartable.com/)...
 
 To set up tracking URLs, you will need to go to Settings / Tracking URLs:
-<img width="1101" alt="Screenshot 2022-12-17 at 10 19 50 AM" src="https://user-images.githubusercontent.com/1719237/208216098-1c8ab8df-eeae-4e50-96c8-4347911ee281.png">
+![Screenshot 2023-01-05 at 7 57 02 AM](https://user-images.githubusercontent.com/1719237/210665674-39f9b0a9-1f28-4608-b0cd-c67b8a5c87ec.png)
+
 
 From there, you can add the third-party tracking URLs that you want to use.
 microfeed will automatically add these URLs to the front of the URL for your media files, allowing you to track download statistics.
@@ -281,12 +316,37 @@ If you are looking for something new and are interested in exploring different o
 It is always a good idea to carefully evaluate any service before using it to ensure that it meets your needs and is a good fit for your use case.
 </details>
 
-## Contributions
+<details>
+<summary><b>How to download / backup data from microfeed / Cloudflare?</b></summary>
+
+microfeed stores data in Cloudflare D1 and R2. Therefore, you'll download two things to backup your microfeed data:
+* a sqlite database from [Cloudflare D1](https://developers.cloudflare.com/d1/), including all metadata.
+* media files from [Cloudflare R2](https://developers.cloudflare.com/r2/), including audio, image, video...
+
+<b>How to download a sqlite database from D1?</b>
+
+You can use the command line tool `wrangler` to find sqlite database files and download backups:
+
+[https://developers.cloudflare.com/workers/wrangler/commands/#d1](https://developers.cloudflare.com/workers/wrangler/commands/#d1)
+
+<b>How to download media files from R2?</b>
+
+As of Feb 16, 2023, Cloudflare has not provided tools to to batch download all files from a R2 bucket.
+
+You may need to write a script to use [S3-compatible APIs](https://developers.cloudflare.com/r2/data-access/s3-api/api/) to fetch all objects from a specific R2 bucket.
+
+</details>
+
+[Back to 📚TOC](#-table-of-contents)
+
+## 💪 Contributions
 We welcome contributions to microfeed!
 If you have an idea for a new feature or have found a bug, please [open an issue](https://github.com/microfeed/microfeed/issues/new) in the repository.
 If you'd like to submit a fix or new feature, please create a pull request with a detailed description of your changes.
 
 ### Run microfeed on local
+
+Pre-requisites: node / npm, yarn, and wrangler
 
 First, create a .vars.toml file in microfeed's root directory (same level as this README.md file) and put 5 secrets in the .vars.toml file (Similar to [Step 2. Put some secrets on your forked repo](#step-2-put-some-secrets-on-your-forked-repo)):
 ```toml
@@ -306,5 +366,9 @@ npm run dev
 
 You should be able to access to a local microfeed instance via http://127.0.0.1:8788/.
 
-## License
+[Back to 📚TOC](#-table-of-contents)
+
+## 🛡️ License
 microfeed is licensed under the [AGPL-3.0](https://github.com/microfeed/microfeed/blob/main/LICENSE) license. Please see [the LICENSE file](https://github.com/microfeed/microfeed/blob/main/LICENSE) for more information.
+
+[Back to 📚TOC](#-table-of-contents)
